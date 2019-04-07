@@ -30,18 +30,19 @@ really a list containing a function to
 <!-- -->
 
     makeCacheMatrix <- function(x = matrix()) {
-           invMatrix <- NULL
-            setMatrix <- function(y) {
-                    x <<- y
-                    invMatrix <<- NULL
-            }
-            getMatrix <- function() x
-            setInverse <- function(inverse) invMatrix <<- inverse
-            getInverse <- function() invMatrix
-            list(setMatrix = setMatrix, getMatrix = getMatrix,
-                 setinverse = setinverse,
-                 getInverse = getInverse)
-    }
+  invMatrix <- NULL
+  setMatrix <- function(y) {
+    x <<- y
+    invMatrix <<- NULL
+  }
+  getMatrix <- function() x                                        #get the value of the matrix
+  setInverse <- function(inverse) invMatrix <<- inverse            #set the value of the invertible matrix
+  getInverse <- function() invMatrix                               #get the value of the invertible matrix 
+  list(setMatrix = setMatrix, getMatrix = getMatrix,
+       setinverse = setinverse,
+       getInverse = getInverse)
+  
+}
 
 The following function calculates the mean of the special "vector"
 created with the above function. However, it first checks to see if the
@@ -51,16 +52,19 @@ the data and sets the value of the mean in the cache via the `setmean`
 function.
 
     cacheSolve <- function(x, ...) {
-            invMatrix <- x$getInverse()
-            if(!is.null(invMatrix)) {
-                    message("getting cached Invertible Matrix")
-                    return(invMatrix)
-            }
-            MatrixData <- x$getMatrix()
-            invMatrix <- solve(MatrixData, ...)
-            x$setInverse(invMatrix)
-            invMatrix
-    }
+  #get the value of the invertible matrix from the makeCacheMatrix function
+  invMatrix <- x$getInverse()
+  if(!is.null(invMatrix)) {                                    #if inverse matrix is not NULL
+    message("getting cached Invertible Matrix")                #type message :  getting cached invertible Matrix                            
+    return(invMatrix)                                          #return the invertible matrix
+    
+  }
+  # if value of the invertible martrix is NULL then
+  MatrixData <- x$getMatrix()                                   #get the original matrix data
+  invMatrix <- solve(MatrixData, ...)                           #us solve function to inverse the matrix
+  x$setInverse(invMatrix)                                       #set the invertible matrix
+  invMatrix                                                     #return the invertible matrix
+}    ## return a matrix that is the inverse of 'x'
 
 ### Assignment: Caching the Inverse of a Matrix
 
